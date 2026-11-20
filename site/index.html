@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ForexPilot AI - live status</title>
+<style>
+ body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:680px;margin:3rem auto;padding:0 1rem;color:#16233a;background:#f7f8fa}
+ .badge{display:inline-block;padding:.45rem 1.1rem;border-radius:1.2rem;font-weight:700;letter-spacing:.03em}
+ .paper{background:#2e7d32;color:#fff}
+ .stale{background:#c62828;color:#fff}
+ table{border-collapse:collapse;margin:1.5rem 0;width:100%;background:#fff}
+ td,th{border:1px solid #d8dde5;padding:.5rem .8rem;text-align:left;font-size:.95rem}
+ th{background:#16233a;color:#fff;font-weight:600}
+ .muted{color:#5b6a80;font-size:.85rem}
+ h1{margin-bottom:.2rem}
+</style>
+</head>
+<body>
+<h1>ForexPilot AI</h1>
+<p><span id="badge" class="badge paper">PAPER / WAITING FOR CTRADER</span></p>
+<p>This is the public status page for the ForexPilot AI paper-demo engine. It runs paper backtests only: no broker connection, no order placement, no live trading, ever.</p>
+<table>
+ <tr><th>Check</th><th>State</th></tr>
+ <tr><td>Mode</td><td>paper_demo_only</td></tr>
+ <tr><td>Live trading</td><td>disabled by design</td></tr>
+ <tr><td>Order placement</td><td>disabled by design</td></tr>
+ <tr><td>Broker connection</td><td>none</td></tr>
+ <tr><td>Latest run</td><td id="run">loading...</td></tr>
+ <tr><td>Data source</td><td id="data">loading...</td></tr>
+ <tr><td>Net return (run)</td><td id="net">-</td></tr>
+ <tr><td>Trades (run)</td><td id="trades">-</td></tr>
+ <tr><td>Max drawdown</td><td id="dd">-</td></tr>
+ <tr><td>Status updated</td><td id="when">-</td></tr>
+</table>
+<p class="muted">Engine source lives in a private repository. This page carries run results only. A run is marked stale if no update landed in 30 hours.</p>
+<script>
+ fetch("status.json", {cache: "no-store"}).then(r => r.json()).then(s => {
+   const ageH = (Date.now() - new Date(s.generated_at_utc.replace(" ", "T") + "Z")) / 36e5;
+   if (ageH > 30) { const b = document.getElementById("badge"); b.textContent = "STALE (NO RUN IN 30H)"; b.className = "badge stale"; }
+   document.getElementById("run").textContent = s.latest_run ? (s.latest_run.run_time_utc + " UTC, " + s.latest_run.candle_count + " candles") : "none yet";
+   document.getElementById("data").textContent = s.data_source;
+   document.getElementById("net").textContent = s.latest_run ? (s.latest_run.net_return_pct.toFixed(2) + "%") : "-";
+   document.getElementById("trades").textContent = s.latest_run ? s.latest_run.trade_count : "-";
+   document.getElementById("dd").textContent = s.latest_run ? (s.latest_run.max_drawdown_pct.toFixed(2) + "%") : "-";
+   document.getElementById("when").textContent = s.generated_at_utc + " UTC";
+ }).catch(() => { document.getElementById("run").textContent = "status unavailable"; });
+</script>
+</body>
+</html>
