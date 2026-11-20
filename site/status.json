@@ -1,0 +1,20 @@
+{
+  "service": "ForexPilot AI",
+  "mode": "paper_demo_only",
+  "live_trading": "disabled",
+  "order_placement": "disabled",
+  "broker_connection": "none",
+  "ctrader_status": "waiting_for_owner_app_registration",
+  "data_source": "sample_comex_gold_futures_h4_459_bars",
+  "generated_at_utc": "2026-11-20 11:53:00",
+  "generated_by": "Fo local run; the daily hosted run schedule updates this page",
+  "latest_run": {
+    "run_time_utc": "2026-11-20 11:53:00",
+    "candle_count": 459,
+    "net_return_pct": -5.3264114247,
+    "trade_count": 3,
+    "max_drawdown_pct": 9.036416,
+    "audit_hash": "bba009200e1e1179b41ea43c9305cd9d93c6a038f6e76996ca04acee703ac0fd",
+    "data_sha256": "510d3866e95cc9dbe4bb0a22e0fc2327d98c1e49d89ccecf776ccd977f3d054d"
+  }
+}
